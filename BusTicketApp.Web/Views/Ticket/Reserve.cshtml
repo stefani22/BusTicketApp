@@ -1,0 +1,24 @@
+﻿@model BusTicketApp.Domain.Models.BusRoute
+
+@{
+    ViewData["Title"] = "Reserve Ticket";
+}
+
+<h2>Reserve Ticket</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h4>@Model.RouteName</h4>
+        <p><strong>From station:</strong> @Model.BusStation?.Name (@Model.BusStation?.Town)</p>
+        <p><strong>Destination:</strong> @Model.DestinationTown (@Model.DestinationCountry)</p>
+        <p><strong>Departure:</strong> @Model.DepartureTime.ToString("dd.MM.yyyy HH:mm")</p>
+        <p><strong>Price:</strong> @Model.Price</p>
+        <p><strong>Available seats:</strong> @Model.AvailableSeats</p>
+    </div>
+</div>
+
+<form asp-action="ReserveConfirmed" method="post" class="mt-3">
+    <input type="hidden" name="routeId" value="@Model.Id" />
+    <button type="submit" class="btn btn-success">Confirm Reservation</button>
+    <a asp-controller="BusRoutes" asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

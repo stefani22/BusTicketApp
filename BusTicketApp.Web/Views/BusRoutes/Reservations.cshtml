@@ -1,0 +1,51 @@
+﻿@model BusTicketApp.Domain.DTO.RouteTicketsViewModel
+
+@{
+    ViewData["Title"] = "Route reservations";
+}
+
+<h2>Reservations for @Model.Route.RouteName</h2>
+
+<p>
+    <strong>From station:</strong> @Model.Route.BusStation?.Name (@Model.Route.BusStation?.Town) <br />
+    <strong>Destination:</strong> @Model.Route.DestinationTown (@Model.Route.DestinationCountry) <br />
+    <strong>Departure:</strong> @Model.Route.DepartureTime.ToString("dd.MM.yyyy HH:mm") <br />
+    <strong>Available seats:</strong> @Model.Route.AvailableSeats
+</p>
+
+<hr />
+
+@if (Model.Tickets == null || !Model.Tickets.Any())
+{
+    <p><em>No reservations for this route yet.</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Passenger</th>
+                <th>Email</th>
+                <th>Seat</th>
+                <th>Booking date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model.Tickets)
+            {
+                <tr>
+                    
+                    <td>@ticket.AppUser?.Email</td>
+                    <td>@ticket.SeatNumber</td>
+                    <td>@ticket.BookingDate.ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<p>
+    <a asp-action="Details" asp-route-id="@Model.Route.Id" class="btn btn-secondary">
+        Back to route details
+    </a>
+</p>

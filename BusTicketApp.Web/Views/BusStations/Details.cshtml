@@ -1,0 +1,68 @@
+﻿@model BusTicketApp.Domain.Models.BusStation
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>BusStation</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Town)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Town)
+        </dd>
+        <dt class="col-sm-2">Location</dt>
+        <dd class="col-sm-10">@Model.Location</dd>
+
+        <dt class="col-sm-2">Phone</dt>
+        <dd class="col-sm-10">@Model.PhoneNumber</dd>
+    </dl>
+</div>
+
+@if (Model.BusRoutes != null && Model.BusRoutes.Any())
+{
+    <h4>Routes from this station</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Route</th>
+                <th>Destination</th>
+                <th>Departure</th>
+                <th>Price</th>
+                <th>Available seats</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var route in Model.BusRoutes)
+            {
+                <tr>
+                    <td>@route.RouteName</td>
+                    <td>@route.DestinationTown (@route.DestinationCountry)</td>
+                    <td>@route.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@route.Price</td>
+                    <td>@route.AvailableSeats</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><em>No routes for this station yet.</em></p>
+}
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<BusTicketApp.Domain.Models.BusRoute>
+
+@{
+    ViewData["Title"] = "Bus Routes";
+}
+
+<h1>Bus Routes</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.RouteName)</th>
+            <th>@Html.DisplayNameFor(model => model.DestinationTown)</th>
+            <th>@Html.DisplayNameFor(model => model.DestinationCountry)</th>
+            <th>Departure</th>
+            <th>@Html.DisplayNameFor(model => model.Price)</th>
+            <th>@Html.DisplayNameFor(model => model.AvailableSeats)</th>
+            <th>@Html.DisplayNameFor(model => model.DistanceKm)</th>
+            <th>@Html.DisplayNameFor(model => model.EstimatedHours)</th>
+            <th>Bus Station</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.RouteName)</td>
+                <td>@Html.DisplayFor(modelItem => item.DestinationTown)</td>
+                <td>@Html.DisplayFor(modelItem => item.DestinationCountry)</td>
+                <td>@item.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>@Html.DisplayFor(modelItem => item.AvailableSeats)</td>
+                <td>@Html.DisplayFor(modelItem => item.DistanceKm)</td>
+                <td>@Html.DisplayFor(modelItem => item.EstimatedHours)</td>
+                <td>@item.BusStation?.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-controller="Ticket"
+                       asp-action="Reserve"
+                       asp-route-routeId="@item.Id"
+                       class="btn btn-sm btn-success">
+                        Reserve
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
