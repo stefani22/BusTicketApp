@@ -3,6 +3,10 @@ using BusTicketApp.Domain.Models;
 using BusTicketApp.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+
+
+
 
 using BusTicketApp.Domain.DTO;
 
@@ -60,17 +64,27 @@ namespace BusTicketApp.Web.Controllers
         }
 
         // GET: BusRoutes/Create
-        public IActionResult Create()
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create(Guid? stationId)
         {
-            // dropdown за BusStation
             var stations = _busStationService.GetAll();
-            ViewData["BusStationId"] = new SelectList(stations, "Id", "Name");
+
+            ViewData["BusStationId"] = new SelectList(
+                stations,
+                "Id",
+                "Name",
+                stationId // ja selektira izbranata stanica
+            );
+
             return View();
         }
+
 
         // POST: BusRoutes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Create(BusRoute busRoute)
         {
             // може и без ModelState за да не те зеза
@@ -78,6 +92,8 @@ namespace BusTicketApp.Web.Controllers
             _busRouteService.Insert(busRoute);
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = "Admin")]
+
 
         // GET: BusRoutes/Edit/5
         public IActionResult Edit(Guid? id)
@@ -102,6 +118,8 @@ namespace BusTicketApp.Web.Controllers
         // POST: BusRoutes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Edit(Guid id, BusRoute busRoute)
         {
             if (id != busRoute.Id)
@@ -114,6 +132,8 @@ namespace BusTicketApp.Web.Controllers
         }
 
         // GET: BusRoutes/Delete/5
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -133,11 +153,14 @@ namespace BusTicketApp.Web.Controllers
         // POST: BusRoutes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
         public IActionResult DeleteConfirmed(Guid id)
         {
             _busRouteService.DeleteById(id);
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = "Admin")]
 
         public IActionResult Reservations(Guid id)
         {

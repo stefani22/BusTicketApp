@@ -1,8 +1,87 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model BusTicketApp.Domain.DTO.RouteSearchViewModel
+
+@{
+    ViewData["Title"] = "Search routes";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>Find a bus route</h2>
+
+<form asp-action="Index" asp-controller="Home" method="get" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <label class="form-label">From (departure city)</label>
+        <input class="form-control"
+               type="text"
+               name="fromTown"
+               value="@Model.FromTown"
+               placeholder="e.g. Skopje" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">To (destination city)</label>
+        <input class="form-control"
+               type="text"
+               name="toTown"
+               value="@Model.ToTown"
+               placeholder="e.g. Solun" />
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary me-2">Search</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+    </div>
+</form>
+
+@if (Model.Results != null && Model.Results.Any())
+{
+    <h4>Found routes (@Model.Results.Count)</h4>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Route</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Departure</th>
+                <th>Price</th>
+                <th>Available seats</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var route in Model.Results)
+            {
+                <tr>
+                    <td>@route.RouteName</td>
+                    <td>@route.BusStation?.Name (@route.BusStation?.Town)</td>
+                    <td>@route.DestinationTown (@route.DestinationCountry)</td>
+                    <td>@route.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@route.Price</td>
+                    <td>@route.AvailableSeats</td>
+                    <td>
+                        <a asp-controller="BusRoutes"
+                           asp-action="Details"
+                           asp-route-id="@route.Id"
+                           class="btn btn-sm btn-outline-info">
+                            Details
+                        </a>
+                        <a asp-controller="Ticket"
+                           asp-action="Reserve"
+                           asp-route-routeId="@route.Id"
+                           class="btn btn-sm btn-success">
+                            Reserve
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    if (!string.IsNullOrWhiteSpace(Model.FromTown) || !string.IsNullOrWhiteSpace(Model.ToTown))
+    {
+        <p><em>No routes match your search.</em></p>
+    }
+    else
+    {
+        <p><em>Use the form above to search for routes.</em></p>
+    }
+}

@@ -6,10 +6,6 @@
 
 <h1>Bus Routes</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
-
 <table class="table">
     <thead>
         <tr>
@@ -39,15 +35,20 @@
                 <td>@Html.DisplayFor(modelItem => item.EstimatedHours)</td>
                 <td>@item.BusStation?.Name</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
                     <a asp-controller="Ticket"
                        asp-action="Reserve"
                        asp-route-routeId="@item.Id"
                        class="btn btn-sm btn-success">
                         Reserve
                     </a>
+    @if (User.IsInRole("Admin"))
+    {
+                        @: |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> 
+    }
+                   
 
                 </td>
             </tr>
