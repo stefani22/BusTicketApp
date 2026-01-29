@@ -6,13 +6,21 @@
 
 <h2>Reserve Ticket</h2>
 
-<div class="card">
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger mt-3">
+        @Html.ValidationSummary(false, "", new { @class = "mb-0" })
+    </div>
+}
+
+<div class="card mt-3">
     <div class="card-body">
         <h4>@Model.RouteName</h4>
         <p><strong>From station:</strong> @Model.BusStation?.Name (@Model.BusStation?.Town)</p>
         <p><strong>Destination:</strong> @Model.DestinationTown (@Model.DestinationCountry)</p>
         <p><strong>Departure:</strong> @Model.DepartureTime.ToString("dd.MM.yyyy HH:mm")</p>
-        <p><strong>Price:</strong> @Model.Price</p>
+        <p><strong>Price:</strong> @Model.Price MKD</p>
         <p><strong>Available seats:</strong> @Model.AvailableSeats</p>
     </div>
 </div>

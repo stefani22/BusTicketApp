@@ -53,7 +53,7 @@ namespace BusTicketApp.Web.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create(BusStation busStation)
         {
-            // за почеток воопшто да не се замараме со ModelState
+            
             busStation.Id = Guid.NewGuid();
             _busStationService.Insert(busStation);
             return RedirectToAction(nameof(Index));

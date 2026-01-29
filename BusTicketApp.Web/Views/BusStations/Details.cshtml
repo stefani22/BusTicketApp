@@ -1,84 +1,135 @@
 ﻿@model BusTicketApp.Domain.Models.BusStation
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Bus station details";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>BusStation</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Town)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Town)
-        </dd>
-        <dt class="col-sm-2">Location</dt>
-        <dd class="col-sm-10">@Model.Location</dd>
-
-        <dt class="col-sm-2">Phone</dt>
-        <dd class="col-sm-10">@Model.PhoneNumber</dd>
-    </dl>
+<div style="
+    background-image: url('/images/img10.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 70px 0;
+">
+    <div class="container text-white">
+        <h1 style="font-weight:700;">
+            @Model.Name
+        </h1>
+        <p class="mb-0">
+            @Model.Town
+        </p>
+    </div>
 </div>
 
-@if (Model.BusRoutes != null && Model.BusRoutes.Any())
-{
-    <h4>Routes from this station</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Route</th>
-                <th>Destination</th>
-                <th>Departure</th>
-                <th>Price</th>
-                <th>Available seats</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var route in Model.BusRoutes)
-            {
-                <tr>
-                    <td>@route.RouteName</td>
-                    <td>@route.DestinationTown (@route.DestinationCountry)</td>
-                    <td>@route.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@route.Price</td>
-                    <td>@route.AvailableSeats</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p><em>No routes for this station yet.</em></p>
-}
+<div class="container mt-5">
 
-<div>
-    @if (User.IsInRole("Admin"))
-{
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> 
-}
-    <a asp-action="Index">Back to List</a>
+    <!-- INFO CARD -->
+    <div class="card shadow-sm mb-4" style="background-color:#e9ecef;">
+        <div class="card-body">
+            <h5 class="mb-3">🚌 Station information</h5>
 
-    @if (User.IsInRole("Admin"))
+            <div class="row mb-2">
+                <div class="col-sm-3 fw-bold">Name</div>
+                <div class="col-sm-9">@Model.Name</div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-sm-3 fw-bold">Town</div>
+                <div class="col-sm-9">@Model.Town</div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-sm-3 fw-bold">Location</div>
+                <div class="col-sm-9">@Model.Location</div>
+            </div>
+
+            <div class="row mb-0">
+                <div class="col-sm-3 fw-bold">Phone</div>
+                <div class="col-sm-9">
+                    @(string.IsNullOrEmpty(Model.PhoneNumber) ? "—" : Model.PhoneNumber)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ROUTES FROM THIS STATION -->
+    @if (Model.BusRoutes != null && Model.BusRoutes.Any())
     {
-        <p>
+        <div class="card shadow-sm mb-4">
+            <div class="card-header" style="background-color:#e9ecef;">
+                <strong>Routes from this station (@Model.BusRoutes.Count())</strong>
+            </div>
+            <div class="card-body p-0">
+                <table class="table mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Route</th>
+                            <th>Destination</th>
+                            <th>Departure</th>
+                            <th>Price</th>
+                            <th>Available seats</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var route in Model.BusRoutes)
+                        {
+                            <tr>
+                                <td>@route.RouteName</td>
+                                <td>@route.DestinationTown (@route.DestinationCountry)</td>
+                                <td>@route.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>@route.Price MKD</td>
+                                <td>@route.AvailableSeats</td>
+                                <td class="text-end">
+                                    <a asp-controller="BusRoutes"
+                                       asp-action="Details"
+                                       asp-route-id="@route.Id"
+                                       class="btn btn-sm btn-outline-info me-1">
+                                        Details
+                                    </a>
+                                    <a asp-controller="Ticket"
+                                       asp-action="Reserve"
+                                       asp-route-routeId="@route.Id"
+                                       class="btn btn-sm btn-success">
+                                        Reserve
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p><em>No routes for this station yet.</em></p>
+    }
+
+   
+    <div class="mt-3 d-flex gap-2 flex-wrap">
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Edit"
+               asp-route-id="@Model?.Id"
+               class="btn btn-warning">
+                Edit station
+            </a>
+        }
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+            Back to stations
+        </a>
+
+        @if (User.IsInRole("Admin"))
+        {
             <a asp-controller="BusRoutes"
                asp-action="Create"
                asp-route-stationId="@Model.Id"
                class="btn btn-primary">
                 Add route from this station
             </a>
-        </p>
-    }
+        }
+    </div>
 
 </div>

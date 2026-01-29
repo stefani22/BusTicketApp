@@ -4,40 +4,83 @@
     ViewData["Title"] = "My Tickets";
 }
 
-<h2>My Tickets</h2>
+<div style="
+    background: linear-gradient(135deg, #0d6efd, #20c997);
+    padding: 40px 0;
+    color: white;
+">
+    <div class="container">
+        <h2 style="font-weight:700;">My tickets</h2>
+        <p class="mb-0">Overview of all your bus reservations</p>
+    </div>
+</div>
 
-@if (!Model.Any())
-{
-    <p>You have no tickets.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Route</th>
-                <th>Destination</th>
-                <th>Departure</th>
-                <th>Booking Date</th>
-                <th>Seat</th>
-                <th></th>   
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var ticket in Model)
-            {
-                <tr>
-                    <td>@ticket.BusRoute?.RouteName</td>
-                    <td>@ticket.BusRoute?.DestinationTown</td>
-                    <td>@ticket.BusRoute?.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@ticket.BookingDate.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@ticket.SeatNumber</td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@ticket.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@ticket.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+<div class="container mt-4 mb-5">
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info mt-3">
+            You have no tickets.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-lg">
+            <div class="card-header d-flex justify-content-between align-items-center"
+                 style="background-color:#0d6efd; color:white;">
+                <span><strong>Your reservations (@Model.Count())</strong></span>
+                <span>🚌 Happy travels!</span>
+            </div>
+
+            <div class="card-body p-0" style="background-color:#f3f4f6;">
+                <table class="table mb-0 align-middle">
+                    <thead style="background-color:#e9ecef;">
+                        <tr>
+                            <th>Route</th>
+                            <th>Destination</th>
+                            <th>Departure</th>
+                            <th>Booking date</th>
+                            <th>Seat</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticket in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@ticket.BusRoute?.RouteName</strong><br />
+                                    <small class="text-muted">
+                                        @ticket.BusRoute?.BusStation?.Town → @ticket.BusRoute?.DestinationTown
+                                    </small>
+                                </td>
+                                <td>@ticket.BusRoute?.DestinationTown</td>
+                                <td>@ticket.BusRoute?.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>@ticket.BookingDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        Seat @ticket.SeatNumber
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <a asp-action="Details"
+                                       asp-route-id="@ticket.Id"
+                                       class="btn btn-sm btn-outline-primary me-1">
+                                        Details
+                                    </a>
+                                    <a asp-action="Delete"
+                                       asp-route-id="@ticket.Id"
+                                       class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    }
+
+</div>

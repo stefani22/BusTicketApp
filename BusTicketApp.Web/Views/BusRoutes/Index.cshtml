@@ -1,57 +1,75 @@
 ﻿@model IEnumerable<BusTicketApp.Domain.Models.BusRoute>
 
 @{
-    ViewData["Title"] = "Bus Routes";
+    ViewData["Title"] = "Bus routes";
 }
 
-<h1>Bus Routes</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.RouteName)</th>
-            <th>@Html.DisplayNameFor(model => model.DestinationTown)</th>
-            <th>@Html.DisplayNameFor(model => model.DestinationCountry)</th>
-            <th>Departure</th>
-            <th>@Html.DisplayNameFor(model => model.Price)</th>
-            <th>@Html.DisplayNameFor(model => model.AvailableSeats)</th>
-            <th>@Html.DisplayNameFor(model => model.DistanceKm)</th>
-            <th>@Html.DisplayNameFor(model => model.EstimatedHours)</th>
-            <th>Bus Station</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div style="
+    background-image: url('/images/img13.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 80px 0;
+">
+    <div class="container text-white">
+        <h1 style="font-weight:700;">Bus routes</h1>
+        <p class="mb-0">Available bus routes from all stations</p>
+    </div>
+</div>
+
+
+<div class="container mt-5">
+
+    <table class="table table-hover shadow-sm rounded-3 overflow-hidden">
+        <thead class="table-light">
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.RouteName)</td>
-                <td>@Html.DisplayFor(modelItem => item.DestinationTown)</td>
-                <td>@Html.DisplayFor(modelItem => item.DestinationCountry)</td>
-                <td>@item.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
-                <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                <td>@Html.DisplayFor(modelItem => item.AvailableSeats)</td>
-                <td>@Html.DisplayFor(modelItem => item.DistanceKm)</td>
-                <td>@Html.DisplayFor(modelItem => item.EstimatedHours)</td>
-                <td>@item.BusStation?.Name</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-controller="Ticket"
-                       asp-action="Reserve"
-                       asp-route-routeId="@item.Id"
-                       class="btn btn-sm btn-success">
-                        Reserve
-                    </a>
-    @if (User.IsInRole("Admin"))
-    {
-                        @: |
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> 
-    }
-                   
-
-                </td>
+                <th>Route</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Departure</th>
+                <th>Price</th>
+                <th>Seats</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var route in Model)
+            {
+                <tr>
+                    <td>
+                        
+                        <svg width="20" height="14" viewBox="0 0 32 22"
+                             style="margin-right:6px; vertical-align:middle;">
+                            <rect x="2" y="5" width="24" height="10" rx="2"
+                                  fill="none" stroke="black" stroke-width="1.5" />
+                            <circle cx="9" cy="17" r="2"
+                                    fill="none" stroke="black" stroke-width="1.5" />
+                            <circle cx="21" cy="17" r="2"
+                                    fill="none" stroke="black" stroke-width="1.5" />
+                        </svg>
+                        <strong>@route.RouteName</strong>
+                    </td>
+                    <td>@route.BusStation?.Town</td>
+                    <td>@route.DestinationTown</td>
+                    <td>@route.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@route.Price MKD</td>
+                    <td>@route.AvailableSeats</td>
+                    <td class="text-end">
+                        <a asp-action="Details"
+                           asp-route-id="@route.Id"
+                           class="btn btn-sm btn-outline-info">
+                            Details
+                        </a>
+                        <a asp-controller="Ticket"
+                           asp-action="Reserve"
+                           asp-route-routeId="@route.Id"
+                           class="btn btn-sm btn-success">
+                            Reserve
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

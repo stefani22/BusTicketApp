@@ -4,65 +4,141 @@
     ViewData["Title"] = "Ticket Details";
 }
 
-<h2>Ticket Details</h2>
+<div class="container mt-4 mb-5">
 
-<h4>Route Information</h4>
-<hr />
-<dl class="row">
-    <dt class="col-sm-2">Route</dt>
-    <dd class="col-sm-10">@Model.RouteName</dd>
+    <h2 class="mb-4">Ticket details</h2>
 
-    <dt class="col-sm-2">From station</dt>
-    <dd class="col-sm-10">@Model.FromStationName (@Model.FromStationTown)</dd>
+    <div class="row g-4">
 
-    <dt class="col-sm-2">Destination</dt>
-    <dd class="col-sm-10">@Model.DestinationTown (@Model.DestinationCountry)</dd>
+        <!-- LEFT: TICKET  -->
+        <div class="col-md-7">
+            <div class="card shadow-lg" style="border-radius:16px; border-left:6px solid #0d6efd;">
+                <div class="card-body">
 
-    <dt class="col-sm-2">Departure</dt>
-    <dd class="col-sm-10">@Model.DepartureTime.ToString("dd.MM.yyyy HH:mm")</dd>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h5 class="mb-1">🚌 @Model.RouteName</h5>
+                            <small class="text-muted">
+                                @Model.FromStationTown → @Model.DestinationTown
+                            </small>
+                        </div>
 
-    <dt class="col-sm-2">Price</dt>
-    <dd class="col-sm-10">@Model.Price</dd>
+                        
+                        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=300&q=80"
+                             alt="Bus"
+                             style="width:70px; height:45px; object-fit:cover; border-radius:8px;">
+                    </div>
 
-    <dt class="col-sm-2">Available seats</dt>
-    <dd class="col-sm-10">@Model.AvailableSeats</dd>
+                    <hr />
 
-    <dt class="col-sm-2">Distance</dt>
-    <dd class="col-sm-10">@Model.DistanceKm} km</dd>
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">From station</div>
+                        <div class="col-8">
+                            @Model.FromStationName (@Model.FromStationTown)
+                        </div>
+                    </div>
 
-    <dt class="col-sm-2">Estimated time</dt>
-    <dd class="col-sm-10">@Model.EstimatedHours h</dd>
-</dl>
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">Destination</div>
+                        <div class="col-8">
+                            @Model.DestinationTown (@Model.DestinationCountry)
+                        </div>
+                    </div>
 
-<h4>Destination Country Info (from API)</h4>
-<hr />
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">Departure</div>
+                        <div class="col-8">
+                            @Model.DepartureTime.ToString("dd.MM.yyyy HH:mm")
+                        </div>
+                    </div>
 
-@if (!string.IsNullOrEmpty(Model.CountryName))
-{
-    <dl class="row">
-        <dt class="col-sm-2">Country</dt>
-        <dd class="col-sm-10">@Model.CountryName</dd>
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">Price</div>
+                        <div class="col-8">
+                            @Model.Price MKD
+                        </div>
+                    </div>
 
-        <dt class="col-sm-2">Capital</dt>
-        <dd class="col-sm-10">@Model.Capital</dd>
+                    
 
-        <dt class="col-sm-2">Region</dt>
-        <dd class="col-sm-10">@Model.Region</dd>
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">Distance</div>
+                        <div class="col-8">
+                            @Model.DistanceKm km
+                        </div>
+                    </div>
 
-        <dt class="col-sm-2">Population</dt>
-        <dd class="col-sm-10">@Model.PopulationInMillions.ToString("0.00") M</dd>
+                    <div class="row mb-0">
+                        <div class="col-4 fw-bold">Estimated time</div>
+                        <div class="col-8">
+                            @Model.EstimatedHours h
+                        </div>
+                    </div>
 
-        <dt class="col-sm-2">Big country?</dt>
-        <dd class="col-sm-10">
-            @(Model.IsBigCountry ? "Yes (more than 5M)" : "No (5M or less)")
-        </dd>
-    </dl>
-}
-else
-{
-    <p><em>No country info available from API.</em></p>
-}
+                </div>
+            </div>
+        </div>
 
-<p>
-    <a asp-action="MyTickets">Back to List</a>
-</p>
+        <!-- RIGHT: EXTRA COUNTRY INFO (API) -->
+        <div class="col-md-5">
+            <div class="card shadow-sm h-100"
+                 style="
+        background-color: #e7f1ff;
+        border-left: 6px solid #0d6efd;
+        border-radius: 16px;
+     ">
+                <div class="card-body">
+
+
+                    <h5 class="mb-2 text-primary">
+                        🌍 Extra information about your destination country
+                    </h5>
+
+                    <span class="badge bg-primary mb-3">
+                        External API data
+                    </span>
+
+
+                    @if (!string.IsNullOrEmpty(Model.CountryName))
+                    {
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Country</dt>
+                            <dd class="col-sm-8">@Model.CountryName</dd>
+
+                            <dt class="col-sm-4">Capital</dt>
+                            <dd class="col-sm-8">@Model.Capital</dd>
+
+                           
+
+                            <dt class="col-sm-4">Population</dt>
+                            <dd class="col-sm-8">
+                                @Model.PopulationInMillions.ToString("0.00") M
+                            </dd>
+
+                            <dt class="col-sm-4">Big country?</dt>
+                            <dd class="col-sm-8">
+                                @(Model.IsBigCountry
+                                                            ? "Yes (more than 5M inhabitants)"
+                                                            : "No (5M or less)")
+                        </dd>
+                    </dl>
+                                        }
+                    else
+                    {
+                        <p><em>No country info available from API.</em></p>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="MyTickets"
+           class="btn btn-outline-secondary">
+            Back to list
+        </a>
+    </div>
+
+</div>

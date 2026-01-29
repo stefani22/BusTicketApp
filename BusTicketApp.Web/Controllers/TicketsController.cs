@@ -60,7 +60,7 @@ namespace BusTicketApp.Web.Controllers
                 return NotFound();
             }
 
-            return View(route); // ќе прикажеме детали за рутата и копче Confirm
+            return View(route); // ke se prikazat detali i kopce reserve
         }
         // GET: Ticket/Details/{id}
         public async Task<IActionResult> Details(Guid id)
@@ -75,7 +75,7 @@ namespace BusTicketApp.Web.Controllers
 
             if (route == null)
             {
-                // за секој случај ако не е вклучен
+                
                 route = _busRouteService.GetById(ticket.BusRouteId);
             }
 
@@ -88,9 +88,7 @@ namespace BusTicketApp.Web.Controllers
 
             if (model == null)
             {
-                // нема податоци од API – можеме да прикажеме барем рута
-                // или да враќаме view со некоја порака
-                // за сега: само рута без држава
+                // nema podatoci od API - prikazuvame ruta
                 model = new RouteCountryInfoDto
                 {
                     RouteId = route.Id,

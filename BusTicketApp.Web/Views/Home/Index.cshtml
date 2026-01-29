@@ -1,51 +1,95 @@
 ﻿@model BusTicketApp.Domain.DTO.RouteSearchViewModel
 
 @{
-    ViewData["Title"] = "Search routes";
+    ViewData["Title"] = "Find a route";
 }
 
-<h2>Find a bus route</h2>
 
-<form asp-action="Index" asp-controller="Home" method="get" class="row g-3 mb-4">
-    <div class="col-md-4">
-        <label class="form-label">From (departure city)</label>
-        <input class="form-control"
-               type="text"
-               name="fromTown"
-               value="@Model.FromTown"
-               placeholder="e.g. Skopje" />
-    </div>
-    <div class="col-md-4">
-        <label class="form-label">To (destination city)</label>
-        <input class="form-control"
-               type="text"
-               name="toTown"
-               value="@Model.ToTown"
-               placeholder="e.g. Solun" />
-    </div>
-    <div class="col-md-4 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary me-2">Search</button>
-        <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
-    </div>
-</form>
+<div class="mb-4"
+     style="
+        position: relative;
+        background-image: url('/images/img2.jpg');
+        background-size: cover;
+        background-position: center;
+        min-height: 350px;
+        border-radius: 0 0 16px 16px;
+     ">
+    <div style="
+        position:absolute;
+        inset:0;
+        background: rgba(0,0,0,0.55);
+        border-radius: 0 0 16px 16px;
+    "></div>
 
-@if (Model.Results != null && Model.Results.Any())
-{
-    <h4>Found routes (@Model.Results.Count)</h4>
+    <div class="container h-100 d-flex align-items-center justify-content-center">
+        <div style="position:relative; z-index:1; width:100%; max-width:900px; margin-top:4rem">
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Route</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Departure</th>
-                <th>Price</th>
-                <th>Available seats</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+            <div class="text-center text-white mb-3">
+                <h1 style="font-weight:700; font-size:2.2rem; margin-bottom:0.3rem;">
+                    Find your next bus route
+                </h1>
+                <p style="margin:0;">
+                    Choose departure and destination city and check available routes.
+                </p>
+            </div>
+
+            <div class="card shadow-lg" style="border-radius:14px;">
+                <div class="card-body">
+                    <form asp-action="Index"
+                          asp-controller="Home"
+                          method="get"
+                          class="row g-3 align-items-end">
+
+                        <div class="col-md-5">
+                            <label class="form-label">From (departure city)</label>
+                            <input class="form-control"
+                                   type="text"
+                                   name="fromTown"
+                                   value="@Model.FromTown"
+                                   placeholder="e.g. Skopje" />
+                        </div>
+
+                        <div class="col-md-5">
+                            <label class="form-label">To (destination city)</label>
+                            <input class="form-control"
+                                   type="text"
+                                   name="toTown"
+                                   value="@Model.ToTown"
+                                   placeholder="e.g. Zurich" />
+                        </div>
+
+                        <div class="col-md-2 d-grid">
+                            <button type="submit" class="btn btn-success">
+                                Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- rezultati -->
+<div class="container">
+    @if (Model.Results != null && Model.Results.Any())
+    {
+        <h3 class="mb-3">Available routes (@Model.Results.Count)</h3>
+
+        <table class="table table-hover shadow-sm rounded-3 overflow-hidden">
+            <thead class="table-light">
+                <tr>
+                    <th>Route</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Departure</th>
+                    <th>Price</th>
+                    <th>Seats</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
             @foreach (var route in Model.Results)
             {
                 <tr>
@@ -53,13 +97,15 @@
                     <td>@route.BusStation?.Name (@route.BusStation?.Town)</td>
                     <td>@route.DestinationTown (@route.DestinationCountry)</td>
                     <td>@route.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@route.Price</td>
-                    <td>@route.AvailableSeats</td>
                     <td>
+                        <span>@route.Price</span> MKD
+                    </td>
+                    <td>@route.AvailableSeats</td>
+                    <td class="text-end">
                         <a asp-controller="BusRoutes"
                            asp-action="Details"
                            asp-route-id="@route.Id"
-                           class="btn btn-sm btn-outline-info">
+                           class="btn btn-sm btn-outline-info me-1">
                             Details
                         </a>
                         <a asp-controller="Ticket"
@@ -71,17 +117,24 @@
                     </td>
                 </tr>
             }
-        </tbody>
-    </table>
-}
-else
+            </tbody>
+        </table>
+    }
+    else
 {
-    if (!string.IsNullOrWhiteSpace(Model.FromTown) || !string.IsNullOrWhiteSpace(Model.ToTown))
+    if (!string.IsNullOrWhiteSpace(Model.FromTown) || 
+        !string.IsNullOrWhiteSpace(Model.ToTown))
     {
-        <p><em>No routes match your search.</em></p>
+        <div class="alert alert-warning mt-3">
+            No routes were found for the selected destination.
+        </div>
     }
     else
     {
-        <p><em>Use the form above to search for routes.</em></p>
+        <p class="text-muted mt-3">
+            <em>Enter departure and destination city to search for routes.</em>
+        </p>
     }
 }
+
+</div>

@@ -87,7 +87,7 @@ namespace BusTicketApp.Web.Controllers
 
         public IActionResult Create(BusRoute busRoute)
         {
-            // може и без ModelState за да не те зеза
+            
             busRoute.Id = Guid.NewGuid();
             _busRouteService.Insert(busRoute);
             return RedirectToAction(nameof(Index));

@@ -28,7 +28,8 @@ public class BusRouteService : IBusRouteService
     {
         return _routeRepository.Get(
             selector: x => x,
-            predicate: x => x.Id == id
+            predicate: x => x.Id == id,
+            include: q => q.Include(r => r.BusStation)
         );
     }
 

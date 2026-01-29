@@ -1,49 +1,99 @@
 ﻿@model IEnumerable<BusTicketApp.Domain.Models.BusStation>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Bus stations";
 }
 
-<h1>Index</h1>
 
-@if (User.IsInRole("Admin"))
-{
-    <p>
-        <a asp-action="Create" class="btn btn-primary">Create New</a>
-    </p>
-}
+<div style="
+    min-height: 100vh;
+    background: linear-gradient(
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.55)
+    ),
+    url('/images/img5.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 60px 40px;
+">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Town)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Town)
-            </td>
-            <td>
-                
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+    <h2 class="text-white mb-4">Bus stations</h2>
+
+    <div class="row g-4">
+        @foreach (var station in Model)
+        {
+            <div class="col-md-4">
+                <div class="card h-100"
+                     style="
+                                background: rgba(255,255,255,0.95);
+                                border-radius: 16px;
+                                box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+                                transition: transform 0.2s;
+                             "
+                     onmouseover="this.style.transform='translateY(-6px)'"
+                     onmouseout="this.style.transform='translateY(0)'">
+
+                    <div class="card-body">
+
+                        
+                        <div class="d-flex align-items-center mb-2">
+                            <div style="margin-right:8px;">
+                                <svg width="32" height="22" viewBox="0 0 32 22" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="2" y="5" width="24" height="10" rx="2"
+                                          fill="none" stroke="black" stroke-width="1.5" />
+                                    <rect x="6" y="7" width="6" height="4"
+                                          fill="none" stroke="black" stroke-width="1" />
+                                    <rect x="14" y="7" width="6" height="4"
+                                          fill="none" stroke="black" stroke-width="1" />
+                                    <circle cx="9" cy="17" r="2"
+                                            fill="none" stroke="black" stroke-width="1.5" />
+                                    <circle cx="21" cy="17" r="2"
+                                            fill="none" stroke="black" stroke-width="1.5" />
+                                </svg>
+                            </div>
+                            <h5 class="card-title mb-0">@station.Name</h5>
+                        </div>
+
+                        <p class="mb-1">
+                            <strong>City:</strong> @station.Town
+                        </p>
+                        <p class="mb-1">
+                            <strong>Location:</strong> @station.Location
+                        </p>
+
+                        <a asp-action="Details"
+                           asp-route-id="@station.Id"
+                           class="btn btn-outline-primary w-100 mt-2">
+                            View details
+                        </a>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="d-flex gap-2 mt-2">
+                                <a asp-action="Edit"
+                                   asp-route-id="@station.Id"
+                                   class="btn btn-outline-warning w-50">
+                                    Edit
+                                </a>
+                                <a asp-action="Delete"
+                                   asp-route-id="@station.Id"
+                                   class="btn btn-outline-danger w-50">
+                                    Delete
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
     @if (User.IsInRole("Admin"))
-                    {
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    }
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    {
+        <div class="mt-5">
+            <a asp-action="Create" class="btn btn-light btn-lg">
+                + Add new bus station
+            </a>
+        </div>
+    }
+</div>
